@@ -60,7 +60,7 @@ export default defineNuxtConfig({
 		name: process.env.SHOPIFY_STORE_NAME,
 		clients: {
 			storefront: {
-				apiVersion:'2026-04',
+				apiVersion: "2026-04",
 				publicAccessToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
 			},
 		},
