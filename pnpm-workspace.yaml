@@ -1,0 +1,11 @@
+allowBuilds:
+  '@apollo/protobufjs': false
+  '@parcel/watcher': false
+  '@tailwindcss/oxide': false
+  core-js: false
+  core-js-pure: false
+  esbuild: false
+  sharp: true
+  unrs-resolver: false
+  vue-demi: false
+  yarn: false

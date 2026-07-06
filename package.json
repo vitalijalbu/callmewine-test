@@ -1,0 +1,31 @@
+{
+  "name": "callmewine-test",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.116",
+    "@iconify-json/simple-icons": "^1.2.89",
+    "@nuxt/image": "2.0.0",
+    "@nuxt/ui": "^4.9.0",
+    "@nuxtjs/google-fonts": "3.2.0",
+    "@nuxtjs/seo": "5.3.2",
+    "@nuxtjs/shopify": "0.6.0",
+    "nuxt": "^4.4.8",
+    "tailwindcss": "^4.3.2"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.16.0",
+    "eslint": "^10.6.0",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.6"
+  },
+  "packageManager": "pnpm@11.10.0"
+}
