@@ -57,11 +57,11 @@ export default defineNuxtConfig({
 	},
 
 	shopify: {
-		name: "callmewine-stage-uk",
+		name: process.env.SHOPIFY_STORE_NAME,
 		clients: {
 			storefront: {
-				apiVersion: "2026-04",
-				publicAccessToken: "8d092a6931f29f23ceb49747fdc87da8",
+				apiVersion:'2026-04',
+				publicAccessToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
 			},
 		},
 	},
