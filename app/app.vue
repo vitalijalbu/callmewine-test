@@ -27,7 +27,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
+  <UApp mode="light">
     <UHeader class="bg-primary">
       <template #left>
         <NuxtLink to="/">

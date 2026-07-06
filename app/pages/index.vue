@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { PRODUCT_BY_HANDLE_QUERY } from '~/graphql/product'
+import { PRODUCT_BY_ID_QUERY } from '~/graphql/product'
 import type { GetProductByHandleResult } from '~/types/product'
 import { normalizeProductImages } from '~/utils/image'
 
-const handle = 'cartizze-extra-dry-ruggeri'
+const productId = 'gid://shopify/Product/7171746234415'
 
 const { data, error } = await useStorefrontData<
-  typeof PRODUCT_BY_HANDLE_QUERY,
+  typeof PRODUCT_BY_ID_QUERY,
   GetProductByHandleResult
->(`product:${handle}`, PRODUCT_BY_HANDLE_QUERY, {
-  variables: { handle }
+>(`product:${productId}`, PRODUCT_BY_ID_QUERY, {
+  variables: { id: productId }
 })
 
 if (error.value || !data.value?.product) {
