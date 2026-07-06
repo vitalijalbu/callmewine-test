@@ -1,114 +1,124 @@
 <script setup lang="ts">
-import type { Product, ProductVariant } from '~/types/product'
-import { giftBoxSchema, type GiftBoxSchema } from '~/schemas/gift-box'
+import { type GiftBoxSchema, giftBoxSchema } from "~/schemas/gift-box";
+import type { Product, ProductVariant } from "~/types/product";
 
-const props = defineProps<{ product: Product }>()
+const props = defineProps<{ product: Product }>();
 
-const toast = useToast()
-const cart = useCart()
+const { t } = useI18n();
+const toast = useToast();
+const cart = useCart();
+const { $money } = useShopifyContext();
 
-const variants = computed(() => props.product.variants.nodes)
+const variants = computed(() => props.product.variants.nodes);
 
 const hasRealOptions = computed(() =>
-  props.product.options.some(o => o.name !== 'Title')
-)
+	props.product.options.some((o) => o.name !== "Title"),
+);
 
 const selectedOptions = reactive<Record<string, string>>(
-  Object.fromEntries(
-    props.product.options.map(o => [o.name, o.optionValues[0]?.name ?? ''])
-  )
-)
+	Object.fromEntries(
+		props.product.options.map((o) => [o.name, o.optionValues[0]?.name ?? ""]),
+	),
+);
 
 const selectedVariant = computed<ProductVariant | undefined>(() => {
-  return (
-    variants.value.find(v =>
-      v.selectedOptions.every(o => selectedOptions[o.name] === o.value)
-    ) ?? variants.value[0]
-  )
-})
+	return (
+		variants.value.find((v) =>
+			v.selectedOptions.every((o) => selectedOptions[o.name] === o.value),
+		) ?? variants.value[0]
+	);
+});
 
 function selectOption(name: string, value: string) {
-  selectedOptions[name] = value
+	selectedOptions[name] = value;
 }
 
 function isOptionAvailable(name: string, value: string) {
-  return variants.value.some(
-    v =>
-      v.availableForSale
-      && v.selectedOptions.some(o => o.name === name && o.value === value)
-  )
+	return variants.value.some(
+		(v) =>
+			v.availableForSale &&
+			v.selectedOptions.some((o) => o.name === name && o.value === value),
+	);
 }
 
-const quantity = ref(1)
+const quantity = ref(1);
 
 const maxQuantity = computed(() => {
-  const q = selectedVariant.value?.quantityAvailable
-  return q && q > 0 ? Math.min(q, 12) : 12
-})
+	const q = selectedVariant.value?.quantityAvailable;
+	return q && q > 0 ? Math.min(q, 12) : 12;
+});
 
 watch(maxQuantity, (max) => {
-  if (quantity.value > max) quantity.value = max
-})
+	if (quantity.value > max) quantity.value = max;
+});
 
-const inStock = computed(() => selectedVariant.value?.availableForSale ?? false)
+const inStock = computed(
+	() => selectedVariant.value?.availableForSale ?? false,
+);
 
-const unitPrice = computed(() => Number(selectedVariant.value?.price.amount ?? 0))
+const unitPrice = computed(() =>
+	Number(selectedVariant.value?.price.amount ?? 0),
+);
 const compareAtPrice = computed(() => {
-  const c = selectedVariant.value?.compareAtPrice
-  const amount = c ? Number(c.amount) : 0
-  return amount > unitPrice.value ? amount : 0
-})
-const currencyCode = computed(() => selectedVariant.value?.price.currencyCode ?? 'EUR')
+	const c = selectedVariant.value?.compareAtPrice;
+	const amount = c ? Number(c.amount) : 0;
+	return amount > unitPrice.value ? amount : 0;
+});
+const currencyCode = computed(
+	() => selectedVariant.value?.price.currencyCode ?? "EUR",
+);
 const discountPct = computed(() =>
-  compareAtPrice.value ? Math.round((1 - unitPrice.value / compareAtPrice.value) * 100) : 0
-)
+	compareAtPrice.value
+		? Math.round((1 - unitPrice.value / compareAtPrice.value) * 100)
+		: 0,
+);
 
-const giftEnabled = ref(false)
+const giftEnabled = ref(false);
 const gift = reactive<Partial<GiftBoxSchema>>({
-  recipientName: '',
-  senderName: '',
-  message: ''
-})
+	recipientName: "",
+	senderName: "",
+	message: "",
+});
 
 watch(giftEnabled, (enabled) => {
-  if (!enabled) {
-    gift.recipientName = ''
-    gift.senderName = ''
-    gift.message = ''
-  }
-})
+	if (!enabled) {
+		gift.recipientName = "";
+		gift.senderName = "";
+		gift.message = "";
+	}
+});
 
 async function addToCart() {
-  const variant = selectedVariant.value
-  if (!variant || !inStock.value) return
+	const variant = selectedVariant.value;
+	if (!variant || !inStock.value) return;
 
-  let giftData: GiftBoxSchema | null = null
-  if (giftEnabled.value) {
-    const parsed = giftBoxSchema.safeParse(gift)
-    if (!parsed.success) {
-      toast.add({
-        title: 'Completa i dati del regalo',
-        description: parsed.error.issues[0]?.message,
-        color: 'error',
-        icon: 'i-lucide-triangle-alert'
-      })
-      return
-    }
-    giftData = parsed.data
-  }
+	let giftData: GiftBoxSchema | null = null;
+	if (giftEnabled.value) {
+		const parsed = giftBoxSchema.safeParse(gift);
+		if (!parsed.success) {
+			toast.add({
+				title: t("gift.incomplete"),
+				description: parsed.error.issues[0]?.message,
+				color: "error",
+				icon: "i-lucide-triangle-alert",
+			});
+			return;
+		}
+		giftData = parsed.data;
+	}
 
-  await cart.addLine(variant.id, quantity.value, giftData)
+	await cart.addLine(variant.id, quantity.value, giftData);
 
-  const addedQty = quantity.value
-  quantity.value = 1
-  giftEnabled.value = false
+	const addedQty = quantity.value;
+	quantity.value = 1;
+	giftEnabled.value = false;
 
-  toast.add({
-    title: 'Aggiunto al carrello',
-    description: `${addedQty} × ${props.product.title}`,
-    icon: 'i-lucide-shopping-bag',
-    color: 'success'
-  })
+	toast.add({
+		title: t("cart.added"),
+		description: `${addedQty} × ${props.product.title}`,
+		icon: "i-lucide-shopping-bag",
+		color: "success",
+	});
 }
 </script>
 
@@ -116,13 +126,13 @@ async function addToCart() {
   <div class="flex flex-col gap-6">
     <div class="flex flex-wrap items-baseline gap-3">
       <span class="text-3xl font-semibold text-highlighted">
-        {{ formatMoney(unitPrice, currencyCode) }}
+        {{ $money(unitPrice, currencyCode) }}
       </span>
       <span
         v-if="compareAtPrice"
         class="text-lg text-muted line-through"
       >
-        {{ formatMoney(compareAtPrice, currencyCode) }}
+        {{ $money(compareAtPrice, currencyCode) }}
       </span>
       <UBadge
         v-if="discountPct > 0"
@@ -166,10 +176,10 @@ async function addToCart() {
           />
           <div>
             <p class="text-sm font-medium text-highlighted">
-              Rendilo un regalo
+              {{ $t('gift.toggle') }}
             </p>
             <p class="text-xs text-muted">
-              Confezione con biglietto e messaggio personalizzato
+              {{ $t('gift.subtitle') }}
             </p>
           </div>
         </div>
@@ -190,10 +200,10 @@ async function addToCart() {
         :max="maxQuantity"
         :disabled="!inStock"
         class="w-32"
-        aria-label="Quantità"
+        :aria-label="$t('product.quantity')"
       />
       <UButton
-        :label="inStock ? 'Aggiungi al carrello' : 'Esaurito'"
+        :label="inStock ? $t('product.addToCart') : $t('product.outOfStock')"
         icon="i-lucide-shopping-bag"
         size="lg"
         color="primary"
@@ -210,7 +220,7 @@ async function addToCart() {
       color="warning"
       variant="subtle"
       icon="i-lucide-flame"
-      :title="`Solo ${selectedVariant.quantityAvailable} disponibili`"
+      :title="$t('product.lastStock', { n: selectedVariant.quantityAvailable })"
     />
   </div>
 </template>

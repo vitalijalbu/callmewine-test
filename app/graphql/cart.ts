@@ -51,19 +51,19 @@ const CART_FRAGMENT = `#graphql
       }
     }
   }
-`
+`;
 
 export const CART_QUERY = `#graphql
-  query GetCart($cartId: ID!) {
+  query GetCart($cartId: ID!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     cart(id: $cartId) {
       ...CartFields
     }
   }
   ${CART_FRAGMENT}
-`
+`;
 
 export const CART_CREATE = `#graphql
-  mutation CartCreate($lines: [CartLineInput!]!) {
+  mutation CartCreate($lines: [CartLineInput!]!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     cartCreate(input: { lines: $lines }) {
       cart {
         ...CartFields
@@ -75,10 +75,10 @@ export const CART_CREATE = `#graphql
     }
   }
   ${CART_FRAGMENT}
-`
+`;
 
 export const CART_LINES_ADD = `#graphql
-  mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+  mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart {
         ...CartFields
@@ -90,10 +90,10 @@ export const CART_LINES_ADD = `#graphql
     }
   }
   ${CART_FRAGMENT}
-`
+`;
 
 export const CART_LINES_UPDATE = `#graphql
-  mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+  mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart {
         ...CartFields
@@ -105,10 +105,10 @@ export const CART_LINES_UPDATE = `#graphql
     }
   }
   ${CART_FRAGMENT}
-`
+`;
 
 export const CART_LINES_REMOVE = `#graphql
-  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
       cart {
         ...CartFields
@@ -120,4 +120,4 @@ export const CART_LINES_REMOVE = `#graphql
     }
   }
   ${CART_FRAGMENT}
-`
+`;

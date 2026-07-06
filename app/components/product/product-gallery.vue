@@ -1,27 +1,29 @@
 <script setup lang="ts">
-import type { ShopifyImage } from '~/types/product'
+import type { ShopifyImage } from "~/types/product";
 
 const props = defineProps<{
-  images: ShopifyImage[]
-  title: string
-}>()
+	images: ShopifyImage[];
+	title: string;
+}>();
 
-const carousel = useTemplateRef<{ emblaApi?: { scrollTo: (index: number) => void } }>('carousel')
-const activeIndex = ref(0)
+const carousel = useTemplateRef<{
+	emblaApi?: { scrollTo: (index: number) => void };
+}>("carousel");
+const activeIndex = ref(0);
 
 const slides = computed<ShopifyImage[]>(() =>
-  props.images.length
-    ? props.images
-    : [{ url: '', altText: props.title, width: null, height: null }]
-)
+	props.images.length
+		? props.images
+		: [{ url: "", altText: props.title, width: null, height: null }],
+);
 
 function onSelect(index: number) {
-  activeIndex.value = index
+	activeIndex.value = index;
 }
 
 function goTo(index: number) {
-  activeIndex.value = index
-  carousel.value?.emblaApi?.scrollTo(index)
+	activeIndex.value = index;
+	carousel.value?.emblaApi?.scrollTo(index);
 }
 </script>
 

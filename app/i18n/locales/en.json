@@ -1,0 +1,36 @@
+{
+	"product": {
+		"description": "Description",
+		"addToCart": "Add to cart",
+		"outOfStock": "Out of stock",
+		"quantity": "Quantity",
+		"lastStock": "Only {n} left"
+	},
+	"gift": {
+		"toggle": "Make it a gift",
+		"subtitle": "Gift box with personalised card and message",
+		"intro": "Gift box with card: fill in the fields below and the message will be attached to the product in your cart.",
+		"recipientName": "Recipient's name",
+		"recipientPlaceholder": "Who is it for?",
+		"senderName": "Your name",
+		"senderPlaceholder": "From…",
+		"message": "Gift message",
+		"messagePlaceholder": "Write a message for the card…",
+		"badge": "Gift box",
+		"incomplete": "Please complete the gift details"
+	},
+	"cart": {
+		"title": "Your cart",
+		"count": "Your cart is empty | {count} item | {count} items",
+		"emptyMessage": "Nothing here yet.",
+		"removeItem": "Remove item",
+		"subtotal": "Subtotal",
+		"checkout": "Go to checkout",
+		"continue": "Continue shopping",
+		"added": "Added to cart",
+		"error": "Error"
+	},
+	"aria": {
+		"openCart": "Open cart"
+	}
+}

@@ -1,29 +1,35 @@
-<script setup>
-const cart = useCart()
+<script setup lang="ts">
+const cart = useCart();
+const { locale, locales } = useI18n();
+const switchLocalePath = useSwitchLocalePath();
 
 useHead({
-  meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico' }
-  ],
-  htmlAttrs: {
-    lang: 'it'
-  }
-})
+	meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+	link: [{ rel: "icon", href: "/favicon.ico" }],
+	htmlAttrs: {
+		lang: locale,
+	},
+});
 
-const title = 'Callmewine test'
-const description = 'Nuxt 4 shopify test'
+const localeItems = computed(() =>
+	locales.value.map((l) => ({ label: l.name, value: l.code })),
+);
+
+function onLocaleChange(code) {
+	navigateTo(switchLocalePath(code));
+}
+
+const title = "Callmewine Test";
+const description = "Nuxt 4 Shopify Test";
 
 useSeoMeta({
-  title,
-  description,
-  ogTitle: title,
-  ogDescription: description,
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/starter-light.png',
-  twitterCard: 'summary_large_image'
-})
+	title,
+	description,
+	ogTitle: title,
+	ogDescription: description,
+	ogImage: "https://ui.nuxt.com/assets/templates/nuxt/starter-light.png",
+	twitterCard: "summary_large_image",
+});
 </script>
 
 <template>
@@ -42,6 +48,13 @@ useSeoMeta({
       </template>
 
       <template #right>
+        <USelect
+          :model-value="locale"
+          :items="localeItems"
+          size="sm"
+          class="w-32 [&_select]:text-white [&_select]:bg-transparent"
+          @update:model-value="onLocaleChange"
+        />
         <UChip
           :show="cart.count.value > 0"
           :text="cart.count.value"
@@ -51,7 +64,7 @@ useSeoMeta({
         >
           <UButton
             icon="i-lucide-shopping-bag"
-            aria-label="Apri carrello"
+            :aria-label="$t('aria.openCart')"
             color="neutral"
             variant="ghost"
             class="text-white hover:text-white"

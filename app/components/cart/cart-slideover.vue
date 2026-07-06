@@ -1,29 +1,30 @@
 <script setup lang="ts">
-import { GIFT_ATTRIBUTE_KEY } from '~/composables/use-cart'
-import { shopifyImageBase } from '~/utils/image'
+import { GIFT_ATTRIBUTE_KEY } from "~/composables/use-cart";
+import { shopifyImageBase } from "~/utils/image";
 
-const cart = useCart()
+const cart = useCart();
+const { $money } = useShopifyContext();
 
-onMounted(() => cart.ensureLoaded())
+onMounted(() => cart.ensureLoaded());
 
-function giftMessage(attributes: { key: string, value: string }[]) {
-  return attributes.find(a => a.key === 'Messaggio')?.value ?? ''
+function giftMessage(attributes: { key: string; value: string }[]) {
+	return attributes.find((a) => a.key === "Messaggio")?.value ?? "";
 }
 
-function isGift(attributes: { key: string, value: string }[]) {
-  return attributes.some(a => a.key === GIFT_ATTRIBUTE_KEY)
+function isGift(attributes: { key: string; value: string }[]) {
+	return attributes.some((a) => a.key === GIFT_ATTRIBUTE_KEY);
 }
 
 function close() {
-  cart.isOpen.value = false
+	cart.isOpen.value = false;
 }
 </script>
 
 <template>
   <USlideover
     v-model:open="cart.isOpen.value"
-    title="Il tuo carrello"
-    :description="cart.count.value ? `${cart.count.value} articolo/i` : 'Il tuo carrello è vuoto'"
+    :title="$t('cart.title')"
+    :description="$t('cart.count', cart.count.value)"
   >
     <template #body>
       <div
@@ -35,7 +36,7 @@ function close() {
           class="size-12 text-dimmed"
         />
         <p class="text-muted">
-          Ancora niente qui.
+          {{ $t('cart.emptyMessage') }}
         </p>
       </div>
 
@@ -75,7 +76,7 @@ function close() {
                 variant="ghost"
                 size="xs"
                 icon="i-lucide-x"
-                aria-label="Rimuovi articolo"
+                :aria-label="$t('cart.removeItem')"
                 @click="cart.removeLine(line.id)"
               />
             </div>
@@ -89,7 +90,7 @@ function close() {
                   name="i-lucide-gift"
                   class="size-3.5"
                 />
-                Confezione regalo
+                {{ $t('gift.badge') }}
               </span>
               <span
                 v-if="giftMessage(line.attributes)"
@@ -110,7 +111,7 @@ function close() {
                 @update:model-value="(q: number) => cart.updateLine(line.id, q)"
               />
               <span class="text-sm font-medium text-highlighted">
-                {{ formatMoney(line.cost.totalAmount) }}
+                {{ $money(line.cost.totalAmount) }}
               </span>
             </div>
           </div>
@@ -124,16 +125,16 @@ function close() {
     >
       <div class="flex w-full flex-col gap-3">
         <div class="flex items-center justify-between">
-          <span class="text-base font-medium text-highlighted">Subtotale</span>
+          <span class="text-base font-medium text-highlighted">{{ $t('cart.subtotal') }}</span>
           <span class="text-lg font-semibold text-highlighted">
-            {{ cart.subtotal.value ? formatMoney(cart.subtotal.value) : '—' }}
+            {{ cart.subtotal.value ? $money(cart.subtotal.value) : '—' }}
           </span>
         </div>
         <UButton
           :to="cart.checkoutUrl.value"
           external
           target="_blank"
-          label="Vai al checkout"
+          :label="$t('cart.checkout')"
           icon="i-lucide-credit-card"
           size="lg"
           color="primary"
@@ -141,7 +142,7 @@ function close() {
           :disabled="!cart.checkoutUrl.value"
         />
         <UButton
-          label="Continua lo shopping"
+          :label="$t('cart.continue')"
           color="neutral"
           variant="ghost"
           block

@@ -1,56 +1,63 @@
 <script setup lang="ts">
-import { PRODUCT_BY_ID_QUERY } from '~/graphql/product'
-import type { GetProductByHandleResult } from '~/types/product'
-import { normalizeProductImages } from '~/utils/image'
+import { PRODUCT_BY_ID_QUERY } from "~/graphql/product";
+import type { GetProductByHandleResult } from "~/types/product";
+import { normalizeProductImages } from "~/utils/image";
 
-const productId = 'gid://shopify/Product/7171746234415'
+const productId = "gid://shopify/Product/7171746234415";
+
+const { language, country } = useShopifyContext();
 
 const { data, error } = await useStorefrontData<
-  typeof PRODUCT_BY_ID_QUERY,
-  GetProductByHandleResult
->(`product:${productId}`, PRODUCT_BY_ID_QUERY, {
-  variables: { id: productId }
-})
+	typeof PRODUCT_BY_ID_QUERY,
+	GetProductByHandleResult
+>(`product:${productId}:${language.value}`, PRODUCT_BY_ID_QUERY, {
+	variables: {
+		id: productId,
+		language: language.value,
+		country: country.value,
+	},
+});
 
 if (error.value || !data.value?.product) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Prodotto non trovato',
-    fatal: true
-  })
+	throw createError({
+		statusCode: 404,
+		statusMessage: "Prodotto non trovato",
+		fatal: true,
+	});
 }
 
 const product = computed(() => {
-  const p = data.value?.product
-  return p ? normalizeProductImages(p) : null
-})
+	const p = data.value?.product;
+	return p ? normalizeProductImages(p) : null;
+});
 
 const galleryImages = computed(() => {
-  const p = product.value
-  if (!p) return []
-  return p.images.nodes.length
-    ? p.images.nodes
-    : p.featuredImage
-      ? [p.featuredImage]
-      : []
-})
+	const p = product.value;
+	if (!p) return [];
+	return p.images.nodes.length
+		? p.images.nodes
+		: p.featuredImage
+			? [p.featuredImage]
+			: [];
+});
 
-const categoryLabel = computed(() =>
-  product.value?.productType?.split('>').pop()?.trim() ?? ''
-)
+const categoryLabel = computed(
+	() => product.value?.productType?.split(">").pop()?.trim() ?? "",
+);
 
 const displayTags = computed(() =>
-  (product.value?.tags ?? [])
-    .filter(t => !/^(not_|b2b_|brand_|gold_|P\d+)/i.test(t))
-    .slice(0, 6)
-)
+	(product.value?.tags ?? [])
+		.filter((t) => !/^(not_|b2b_|brand_|gold_|P\d+)/i.test(t))
+		.slice(0, 6),
+);
 
 useSeoMeta({
-  title: () => product.value?.seo.title || product.value?.title || 'Prodotto',
-  description: () => product.value?.seo.description || product.value?.description,
-  ogTitle: () => product.value?.title,
-  ogImage: () => product.value?.featuredImage?.url
-})
+	title: () => product.value?.seo.title || product.value?.title || "Prodotto",
+	description: () =>
+		product.value?.seo.description || product.value?.description,
+	ogTitle: () => product.value?.title,
+	ogImage: () => product.value?.featuredImage?.url,
+});
 </script>
 
 <template>
@@ -110,7 +117,7 @@ useSeoMeta({
           class="flex flex-col gap-3"
         >
           <h2 class="text-lg font-semibold text-highlighted">
-            Descrizione
+            {{ $t('product.description') }}
           </h2>
           <div
             class="prose prose-sm dark:prose-invert max-w-none text-muted"

@@ -1,0 +1,36 @@
+{
+	"product": {
+		"description": "Descrizione",
+		"addToCart": "Aggiungi al carrello",
+		"outOfStock": "Esaurito",
+		"quantity": "Quantità",
+		"lastStock": "Solo {n} disponibili"
+	},
+	"gift": {
+		"toggle": "Rendilo un regalo",
+		"subtitle": "Confezione con biglietto e messaggio personalizzato",
+		"intro": "Confezione regalo con biglietto: compila i campi qui sotto e il messaggio verrà allegato al prodotto nel carrello.",
+		"recipientName": "Nome del destinatario",
+		"recipientPlaceholder": "Per chi è?",
+		"senderName": "Il tuo nome",
+		"senderPlaceholder": "Da…",
+		"message": "Messaggio di auguri",
+		"messagePlaceholder": "Scrivi un messaggio per il biglietto…",
+		"badge": "Confezione regalo",
+		"incomplete": "Completa i dati del regalo"
+	},
+	"cart": {
+		"title": "Il tuo carrello",
+		"count": "Il tuo carrello è vuoto | {count} articolo | {count} articoli",
+		"emptyMessage": "Ancora niente qui.",
+		"removeItem": "Rimuovi articolo",
+		"subtotal": "Subtotale",
+		"checkout": "Vai al checkout",
+		"continue": "Continua lo shopping",
+		"added": "Aggiunto al carrello",
+		"error": "Errore"
+	},
+	"aria": {
+		"openCart": "Apri carrello"
+	}
+}

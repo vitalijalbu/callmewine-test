@@ -1,5 +1,5 @@
 export const PRODUCT_BY_ID_QUERY = `#graphql
-  query GetProductById($id: ID!) {
+  query GetProductById($id: ID!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     product(id: $id) {
       id
       handle
@@ -82,4 +82,4 @@ export const PRODUCT_BY_ID_QUERY = `#graphql
       }
     }
   }
-` as const
+` as const;

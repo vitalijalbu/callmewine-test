@@ -1,0 +1,36 @@
+{
+	"product": {
+		"description": "Descripción",
+		"addToCart": "Añadir al carrito",
+		"outOfStock": "Agotado",
+		"quantity": "Cantidad",
+		"lastStock": "Solo quedan {n}"
+	},
+	"gift": {
+		"toggle": "Convertirlo en regalo",
+		"subtitle": "Caja regalo con tarjeta y mensaje personalizado",
+		"intro": "Caja regalo con tarjeta: rellena los campos a continuación y el mensaje se adjuntará al producto en el carrito.",
+		"recipientName": "Nombre del destinatario",
+		"recipientPlaceholder": "¿Para quién es?",
+		"senderName": "Tu nombre",
+		"senderPlaceholder": "De…",
+		"message": "Mensaje de regalo",
+		"messagePlaceholder": "Escribe un mensaje para la tarjeta…",
+		"badge": "Caja regalo",
+		"incomplete": "Completa los datos del regalo"
+	},
+	"cart": {
+		"title": "Tu carrito",
+		"count": "Tu carrito está vacío | {count} artículo | {count} artículos",
+		"emptyMessage": "Nada aquí todavía.",
+		"removeItem": "Eliminar artículo",
+		"subtotal": "Subtotal",
+		"checkout": "Ir al pago",
+		"continue": "Seguir comprando",
+		"added": "Añadido al carrito",
+		"error": "Error"
+	},
+	"aria": {
+		"openCart": "Abrir carrito"
+	}
+}

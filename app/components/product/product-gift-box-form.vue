@@ -1,23 +1,27 @@
 <script setup lang="ts">
-import type { GiftBoxSchema } from '~/schemas/gift-box'
+import type { GiftBoxSchema } from "~/schemas/gift-box";
 
 const props = defineProps<{
-  modelValue: Partial<GiftBoxSchema>
-}>()
+	modelValue: Partial<GiftBoxSchema>;
+}>();
 
 const emit = defineEmits<{
-  'update:modelValue': [value: Partial<GiftBoxSchema>]
-}>()
+	"update:modelValue": [value: Partial<GiftBoxSchema>];
+}>();
 
 const state = reactive<Partial<GiftBoxSchema>>({
-  recipientName: props.modelValue?.recipientName ?? '',
-  senderName: props.modelValue?.senderName ?? '',
-  message: props.modelValue?.message ?? ''
-})
+	recipientName: props.modelValue?.recipientName ?? "",
+	senderName: props.modelValue?.senderName ?? "",
+	message: props.modelValue?.message ?? "",
+});
 
-watch(state, (val) => {
-  emit('update:modelValue', { ...val })
-}, { deep: true })
+watch(
+	state,
+	(val) => {
+		emit("update:modelValue", { ...val });
+	},
+	{ deep: true },
+);
 </script>
 
 <template>
@@ -28,36 +32,36 @@ watch(state, (val) => {
         class="mt-0.5 size-5 shrink-0 text-primary"
       />
       <p class="text-muted">
-        Confezione regalo con biglietto: compila i campi qui sotto e il messaggio verrà allegato al prodotto nel carrello.
+        {{ $t('gift.intro') }}
       </p>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">
       <UFormField
-        label="Nome del destinatario"
+        :label="$t('gift.recipientName')"
         required
       >
         <UInput
           v-model="state.recipientName"
-          placeholder="Per chi è?"
+          :placeholder="$t('gift.recipientPlaceholder')"
           class="w-full"
         />
       </UFormField>
 
       <UFormField
-        label="Il tuo nome"
+        :label="$t('gift.senderName')"
         required
       >
         <UInput
           v-model="state.senderName"
-          placeholder="Da…"
+          :placeholder="$t('gift.senderPlaceholder')"
           class="w-full"
         />
       </UFormField>
     </div>
 
     <UFormField
-      label="Messaggio di auguri"
+      :label="$t('gift.message')"
       required
       :hint="`${state.message?.length ?? 0}/250`"
     >
@@ -65,7 +69,7 @@ watch(state, (val) => {
         v-model="state.message"
         :rows="4"
         :maxlength="250"
-        placeholder="Scrivi un messaggio per il biglietto…"
+        :placeholder="$t('gift.messagePlaceholder')"
         class="w-full"
       />
     </UFormField>
