@@ -1,4 +1,6 @@
 <script setup>
+const cart = useCart()
+
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -7,12 +9,12 @@ useHead({
     { rel: 'icon', href: '/favicon.ico' }
   ],
   htmlAttrs: {
-    lang: 'en'
+    lang: 'it'
   }
 })
 
-const title = 'Nuxt Starter Template'
-const description = 'A production-ready starter template powered by Nuxt UI. Build beautiful, accessible, and performant applications in minutes, not hours.'
+const title = 'Callmewine test'
+const description = 'Nuxt 4 shopify test'
 
 useSeoMeta({
   title,
@@ -26,26 +28,36 @@ useSeoMeta({
 
 <template>
   <UApp>
-    <UHeader>
+    <UHeader class="bg-primary">
       <template #left>
         <NuxtLink to="/">
-          <AppLogo class="w-auto h-6 shrink-0" />
+          <NuxtImg
+            src="/images/logo-callmewine-white.svg"
+            width="190"
+            height="50"
+            alt="Callmewine"
+            class="w-auto h-[50px] shrink-0"
+          />
         </NuxtLink>
-
-        <TemplateMenu />
       </template>
 
       <template #right>
-        <UColorModeButton />
-
-        <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
+        <UChip
+          :show="cart.count.value > 0"
+          :text="cart.count.value"
+          size="3xl"
           color="neutral"
-          variant="ghost"
-        />
+          variant="subtle"
+        >
+          <UButton
+            icon="i-lucide-shopping-bag"
+            aria-label="Apri carrello"
+            color="neutral"
+            variant="ghost"
+            class="text-white hover:text-white"
+            @click="cart.isOpen.value = true"
+          />
+        </UChip>
       </template>
     </UHeader>
 
@@ -53,24 +65,13 @@ useSeoMeta({
       <NuxtPage />
     </UMain>
 
-    <USeparator icon="i-simple-icons-nuxtdotjs" />
+    <CartSlideover />
 
     <UFooter>
       <template #left>
         <p class="text-sm text-muted">
           Built with Nuxt UI • © {{ new Date().getFullYear() }}
         </p>
-      </template>
-
-      <template #right>
-        <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-          color="neutral"
-          variant="ghost"
-        />
       </template>
     </UFooter>
   </UApp>
